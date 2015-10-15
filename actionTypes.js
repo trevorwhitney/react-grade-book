@@ -1,0 +1,2 @@
+export const GET_STUDENTS = 'GET_STUDENTS'
+export const CALCULATE_GRADE = 'CALCULATE_GRADE'
