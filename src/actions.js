@@ -7,12 +7,9 @@ export function getStudents() {
 }
 
 export function calculateGrade(event) {
-  console.log("calculating grade")
-  console.log(event.currentTarget)
-
   return {
     type: CALCULATE_GRADE,
-    score: event.currentTarget.value,
-    studentId: event.currentTarget.dataset.studentId
+    grade: event.currentTarget.value,
+    studentId: parseInt(event.currentTarget.dataset.studentId)
   }
 }

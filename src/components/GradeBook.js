@@ -9,8 +9,15 @@ export default class GradeBook extends Component {
 
   render() {
     const { students, calculateGrade } = this.props
-    let studentRows = students.map(({firstName, lastName}) => {
-      return (<StudentRow firstName={firstName} lastName={lastName} calculateGrade={calculateGrade}/>)
+    let studentRows = students.map(({firstName, lastName, id, grade, score}) => {
+      return (<StudentRow
+        key={id}
+        firstName={firstName}
+        lastName={lastName}
+        grade={grade}
+        score={score}
+        id={id}
+        calculateGrade={calculateGrade}/>)
     })
 
     return (

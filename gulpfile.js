@@ -13,9 +13,11 @@ gulp.task('clean', function () {
 
 /* JavaScript */
 gulp.task('build:js', ['clean'], function () {
-  return browserify()
-    .transform(babelify)
-    .require('./app.js', {entry: true})
+  return browserify({
+    debug: true,
+    fullPaths: true
+  }).transform(babelify)
+    .require('./src/app.js', {entry: true})
     .bundle()
     .pipe(source('app.js'))
     .pipe(gulp.dest('dist/js'));
@@ -35,7 +37,7 @@ gulp.task('serve', ['build'], function () {
     open: false
   });
 
-  gulp.watch(['./js/*.js', './app.js', '*.js', '**/*.js'], ['build']);
+  gulp.watch(['./src/*.js', './src/**/*.js'], ['build']);
 });
 
 gulp.task('default', ['serve']);
