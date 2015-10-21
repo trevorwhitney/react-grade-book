@@ -37,7 +37,8 @@ gulp.task('serve', ['build'], function () {
     open: false
   });
 
-  gulp.watch(['./src/*.js', './src/**/*.js'], ['build']);
+  gulp.watch(['./src/*.js', './src/**/*.js'], ['build:js']);
+  gulp.watch([ 'index.html'], ['build:html']);
 });
 
 gulp.task('default', ['serve']);

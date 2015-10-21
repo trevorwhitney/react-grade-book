@@ -21,7 +21,7 @@ export default class GradeBook extends Component {
     })
 
     return (
-      <table>
+      <table className="table table-striped table-responsive">
         <tbody>
           {studentRows}
         </tbody>
