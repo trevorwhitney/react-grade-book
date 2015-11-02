@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import StudentRow from './StudentRow'
+import connectComponent from '../connectComponent'
 
-export default class GradeBook extends Component {
+class GradeBook extends Component {
   componentDidMount() {
     const {getStudents} = this.props
     getStudents()
@@ -33,3 +34,5 @@ export default class GradeBook extends Component {
 GradeBook.propTypes = {
   student: PropTypes.object
 }
+
+export default connectComponent(GradeBook)

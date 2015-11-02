@@ -1,31 +1,24 @@
 import React from 'react';
 import { Provider } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
 import ReactDOM from 'react-dom'
-
-import configureStore from './configureStore'
-import * as actions from './actions'
+import { ReduxRouter } from 'redux-router'
+import {Route} from 'react-router';
 
 import GradeBook from './components/GradeBook'
+import App from './components/App'
+import NewStudent from './components/NewStudent'
+import configureStore from './configureStore'
 
-
-function mapStateToProps(state) {
-  const { students } = state
-  return {
-    students
-  }
-}
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(actions, dispatch)
-}
-const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(GradeBook)
 const store = configureStore()
 
 ReactDOM.render(
   <Provider store={store}>
-    <ConnectedApp />
+    <ReduxRouter>
+      <Route path="/" component={App}>
+        <Route path="students" component={GradeBook} />
+        <Route path="students/new" component={NewStudent} />
+      </Route>
+    </ReduxRouter>
   </Provider>,
   document.getElementById('grade-book')
 )

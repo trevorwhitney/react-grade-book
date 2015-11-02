@@ -5,14 +5,16 @@ var browserSync = require('browser-sync');
 var source = require('vinyl-source-stream');
 
 var clean = require('gulp-rimraf');
+var wait = require('gulp-wait');
 
 gulp.task('clean', function () {
   return gulp.src('./dist/**/*')
-    .pipe(clean());
+    .pipe(clean())
+    .pipe(wait(500));
 });
 
 /* JavaScript */
-gulp.task('build:js', ['clean'], function () {
+gulp.task('build:js', function () {
   return browserify({
     debug: true,
     fullPaths: true
@@ -27,7 +29,7 @@ gulp.task('build:html', function () {
   return gulp.src('./index.html').pipe(gulp.dest('dist'));
 });
 
-gulp.task('build', ['build:js', 'build:html']);
+gulp.task('build', ['clean', 'build:js', 'build:html']);
 
 gulp.task('serve', ['build'], function () {
   browserSync.init({

@@ -1,4 +1,5 @@
 import {combineReducers} from 'redux'
+import { routerStateReducer } from 'redux-router'
 
 import {GET_STUDENTS, CALCULATE_GRADE} from './actionTypes'
 
@@ -39,9 +40,9 @@ let students = function (students = initialStudentData, action) {
   }
 }
 
-
 const rootReducer = combineReducers({
-  students
+  students,
+  router: routerStateReducer
 })
 
 export default rootReducer
