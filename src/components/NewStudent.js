@@ -1,43 +1,65 @@
-import _ from 'underscore'
-import React from 'react'
 import connectComponent from '../connectComponent'
 
-const NewStudent = (props) => {
-  const startYear = new Date().getFullYear() - 100;
-  const dobYears = _.range(100).map(i => {
-    return (
-      <option value={startYear + i }>{startYear + i}</option>
-    )
-  })
-  const dobMonths = _.range(1, 12).map(i => {
-    return (
-      <option value={i}>{i}</option>
-    )
-  })
+import _ from 'underscore'
+import React, {Component} from 'react'
 
-  return (
-    <form class="form">
-      <div className="form-group">
-        <label class="control-label" htmlFor="firstName">First Name</label>
-        <input type="text" className="form-control" name="firstName" id="firstName"/>
-      </div>
-      <div className="form-group">
-        <label class="control-label" htmlFor="lastName">Last Name</label>
-        <input type="text" className="form-control" name="lastName" id="lastName"/>
-      </div>
-      <div className="form-group">
-        <label class="control-label" htmlFor="dobMonth">Date of Birth</label>
-        <select className="form-control" name="dobMonth" id="dobMonth">
-          {dobMonths}
-        </select>
-        <select className="form-control" name="dobYear" id="dobYear">
-          {dobYears}
-        </select>
-      </div>
+const validators = {
+  firstName: (value) => {
+    return ''
+  },
+  dob: (value) => true
+}
 
-      <button type="submit">Submit</button>
-    </form>
-  );
+class NewStudent extends Component {
+  constructor(props) {
+    super(props)
+    this.validators = validators
+    this.initializeValidatedComponent = props.actions.initializeValidatedComponent
+  }
+
+  componentDidMount() {
+    this.initializeValidatedComponent(this.constructor.name, Object.keys(this.validators))
+  }
+
+  render() {
+    const props = this.props
+    const validators = this.validators
+
+    const {actions: {validateField}} = props
+    const validateNewStudentField = function (fieldName, fieldValue) {
+      validateField('NewStudent', fieldName, validators[fieldName](fieldValue))
+    }
+    const getFieldBlurredHandler = function (fieldName) {
+      return event => {
+        validateNewStudentField(fieldName, event.target.value)
+      }
+    }
+
+    return (
+      <form className="form">
+        <div className="form-group">
+          <label className="control-label" htmlFor="firstName">First Name</label>
+          <input
+            type="text"
+            className="form-control"
+            name="firstName"
+            id="firstName"
+            onBlur={getFieldBlurredHandler('firstName')}
+          />
+        </div>
+        <div className="form-group">
+          <label className="control-label" htmlFor="lastName">Last Name</label>
+          <input type="text" className="form-control" name="lastName" id="lastName"/>
+        </div>
+        <div className="form-group">
+          <label className="control-label" htmlFor="dobMonth">Date of Birth</label>
+          <input className="form-control" type="text" name="dob" id="dob"/>
+        </div>
+
+        <button type="submit">Submit</button>
+      </form>
+    )
+  }
 }
 
 export default connectComponent(NewStudent)

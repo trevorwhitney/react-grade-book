@@ -4,16 +4,15 @@ import { pushState } from 'redux-router'
 import * as actions from './actions'
 
 function mapStateToProps(state) {
-  const { students } = state
   return {
-    students,
+    ...state,
     q: state.router.location.query.q
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    ...bindActionCreators(actions, dispatch),
+    actions: {...bindActionCreators(actions, dispatch)},
     pushState
   }
 }

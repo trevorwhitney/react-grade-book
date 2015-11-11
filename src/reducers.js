@@ -1,7 +1,14 @@
 import {combineReducers} from 'redux'
 import { routerStateReducer } from 'redux-router'
+import _ from 'underscore'
 
-import {GET_STUDENTS, CALCULATE_GRADE} from './actionTypes'
+import validator from './validators'
+import {
+  GET_STUDENTS,
+  CALCULATE_GRADE,
+  VALIDATE_FIELD,
+  INITIALIZE_VALIDATED_COMPONENT
+} from './actionTypes'
 
 let initialStudentData = [
   {
@@ -24,13 +31,13 @@ let initialStudentData = [
   }
 ]
 
-let students = function (students = initialStudentData, action) {
+const students = function (students = initialStudentData, action) {
   switch (action.type) {
     case CALCULATE_GRADE:
       return students.map((student) => {
         if (student.id == action.studentId) {
           student.grade = action.grade
-          student.score = (action.grade/100)
+          student.score = (action.grade / 100)
         }
         return student
       })
@@ -40,9 +47,47 @@ let students = function (students = initialStudentData, action) {
   }
 }
 
+
+const validatedComponents = function (state = {}, action) {
+  switch (action.type) {
+    case VALIDATE_FIELD:
+      return {
+        ...state,
+        [action.componentName]: {
+          ...state[action.componentName],
+          [action.fieldName]: {
+            ...state[action.componentName][action.fieldName],
+            isValid: action.isValid,
+            isInvalid: !action.isValid,
+            error: action.error
+          }
+        }
+      }
+    case INITIALIZE_VALIDATED_COMPONENT:
+      const { componentName, fields } = action
+      return {
+        ...state,
+        [componentName]: state[componentName] || fields.reduce((memo, field) => {
+          return _.tap(memo, (memo) => memo[field] = {
+            isValid: false,
+            isInvalid: true,
+            isDirty: false,
+            isPristine: true,
+            error: ''
+          })
+        }, {})
+      }
+    default:
+      return state
+  }
+}
+
 const rootReducer = combineReducers({
   students,
+  validatedComponents,
   router: routerStateReducer
 })
 
-export default rootReducer
+export
+default
+rootReducer
